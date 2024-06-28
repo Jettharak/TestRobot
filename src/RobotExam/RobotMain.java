@@ -13,13 +13,12 @@ public class RobotMain {
 			while (true) {
 				// Enter data using BufferReader
 				command = new BufferedReader(new InputStreamReader(System.in));
-				// Reading data using readLine
-				String[] cmd = command.readLine().split("\\s+");
-
 				// check string empty
-				if (cmd[0].isEmpty()) {
+				if (command.readLine() != null) {
 					continue;
 				}
+				// Reading data using readLine
+				String[] cmd = command.readLine().split("\\s+");
 				// Convert character to upper case
 				cmd[0] = cmd[0].toUpperCase();
 				// check command what input from screen
