@@ -5,6 +5,7 @@ How to run
 applicatin no need to setup.
 1.go to [bin] folder.
 2.click [RobotRun.bat] file to run.
+application run on command prompt.
 remark I use jdk22 if you use java version below jdk22 may be error occur.
 
 how to use
