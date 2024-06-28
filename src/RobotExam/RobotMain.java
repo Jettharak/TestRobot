@@ -36,10 +36,12 @@ public class RobotMain {
 					}
 					// split text with comma
 					String[] propertys = cmd[1].split(",");
+					//Position x,y must be integer 1 digit
 					if (!(Pattern.matches("^[0-9]$", propertys[0]) || Pattern.matches("^[0-9]$", propertys[1]))) {
 						System.out.println("Position must be integer[0-9].");
 						continue;
 					}
+					//Facing must be NORTH, SOUTH, EAST or WEST only
 					if (!Pattern.matches("NORTH|SOUTH|EAST|WEST", propertys[2])) {
 						System.out.println("Facing must be [NORTH, SOUTH, EAST or WEST].");
 						continue;
