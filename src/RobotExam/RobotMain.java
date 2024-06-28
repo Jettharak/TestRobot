@@ -3,6 +3,7 @@ package RobotExam;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.regex.Pattern;
 
 public class RobotMain {
 	public static void main(String[] arg) {
@@ -13,23 +14,36 @@ public class RobotMain {
 			while (true) {
 				// Enter data using BufferReader
 				command = new BufferedReader(new InputStreamReader(System.in));
+				String inputData = command.readLine();
+				// check string null
+				if (inputData == null) {
+					continue;
+				}
 				// check string empty
-				if (command.readLine() == null) {
+				if (inputData.isBlank()) {
 					continue;
 				}
 				// Reading data using readLine
-				String[] cmd = command.readLine().split("\\s+");
+				String[] cmd = inputData.split("\\s+");
 				// Convert character to upper case
 				cmd[0] = cmd[0].toUpperCase();
 				// check command what input from screen
 				if (cmd[0].equals("PLACE")) {
 					// check PLACE command format
-					if (cmd.length < 2) {
+					if (cmd.length != 2) {
 						System.out.println("Incorrect command.");
 						continue;
 					}
 					// split text with comma
 					String[] propertys = cmd[1].split(",");
+					if (!(Pattern.matches("^[0-9]$", propertys[0]) || Pattern.matches("^[0-9]$", propertys[1]))) {
+						System.out.println("Position must be integer[0-9].");
+						continue;
+					}
+					if (!Pattern.matches("NORTH|SOUTH|EAST|WEST", propertys[2])) {
+						System.out.println("Facing must be [NORTH, SOUTH, EAST or WEST].");
+						continue;
+					}
 					robot = new Robot(Integer.parseInt(propertys[0]), Integer.parseInt(propertys[1]), propertys[2]);
 				}
 
@@ -38,12 +52,16 @@ public class RobotMain {
 					System.out.println("Please place a robot on table.(size 5*5)");
 					continue;
 				}
+				// command order must be start from [PLACE] to place robot on table.
+				if (robot.getF() == null) {
+					System.out.println("Program order must be start command from [PLACE X,Y,F]");
+					continue;
+				}
 
 				if (cmd[0].equals("MOVE")) {
 					robot.move();
 				} else if (cmd[0].equals("REPORT")) {
 					System.out.println(String.format("Output: %d,%d,%s", robot.getX(), robot.getY(), robot.getF()));
-					break;
 				} else if (cmd[0].equals("LEFT") || cmd[0].equals("RIGHT")) {
 					robot.rotate(cmd[0]);
 				}
@@ -109,8 +127,9 @@ class Robot {
 	 * Method
 	 **********/
 	/**
-	 * Rotate robot's facing when input rotate command [LEFT, RIGHT]
-	 * LEFT and RIGHT will rotate the robot 90 degrees in the specified direction
+	 * Rotate robot's facing when input rotate command [LEFT, RIGHT] LEFT and RIGHT
+	 * will rotate the robot 90 degrees in the specified direction
+	 * 
 	 * @param rotateSite
 	 */
 	public void rotate(String rotateSite) {
@@ -163,15 +182,14 @@ class Robot {
 	}
 
 	/**
-	 * move robot forward position follow robot facing site.
-	 * NORTH,EAST will +1 and SOUTH, WEST will -1
-	 * robot will not move out of the table 5*5
-	 * The origin (0,0) can be considered to be the SOUTH WEST most corner.
+	 * move robot forward position follow robot facing site. NORTH,EAST will +1 and
+	 * SOUTH, WEST will -1 robot will not move out of the table 5*5 The origin (0,0)
+	 * can be considered to be the SOUTH WEST most corner.
 	 */
 	public void move() {
 
 		// check current position for direction
-		// command will be ignored if a robot try move out of table 
+		// command will be ignored if a robot try move out of table
 		switch (f) {
 		case NORTH:
 			if (this.y < 5) {
