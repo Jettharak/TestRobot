@@ -1,3 +1,0 @@
-java RobotExam.RobotMain
-
-pause
