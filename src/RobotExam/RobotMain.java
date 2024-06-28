@@ -14,7 +14,7 @@ public class RobotMain {
 				// Enter data using BufferReader
 				command = new BufferedReader(new InputStreamReader(System.in));
 				// check string empty
-				if (command.readLine() != null) {
+				if (command.readLine() == null) {
 					continue;
 				}
 				// Reading data using readLine
